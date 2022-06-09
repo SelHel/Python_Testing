@@ -1,8 +1,7 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
 
-app = Flask(__name__)
-app.secret_key = 'something_special'
+POINTS_FOR_A_PLACE = 1
 
 
 def loadClubs():
@@ -16,6 +15,9 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
 
+
+app = Flask(__name__)
+app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
@@ -32,7 +34,7 @@ def showSummary():
     except IndexError:
         flash("Sorry, that email wasn't found.")
         return redirect(url_for('index'))
-    return render_template('welcome.html',club=club,competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions)
 
 
 @app.route('/book/<competition>/<club>')
@@ -51,8 +53,13 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!')
+    places_allowed = int(club["points"]) // POINTS_FOR_A_PLACE
+    if placesRequired > places_allowed:
+        flash('You cannot redeem more points than available!')
+    else:
+        competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+        club["points"] = places_allowed - placesRequired * POINTS_FOR_A_PLACE
+        flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
