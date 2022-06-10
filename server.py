@@ -1,9 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
 
-app = Flask(__name__)
-app.secret_key = 'something_special'
-
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -15,6 +12,10 @@ def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+
+
+app = Flask(__name__)
+app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
@@ -29,10 +30,10 @@ def index():
 def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
+        return render_template('welcome.html', club=club, competitions=competitions)
     except IndexError:
         flash("Sorry, that email wasn't found.")
-        return redirect(url_for('index'))
-    return render_template('welcome.html',club=club,competitions=competitions)
+        return render_template('index.html')
 
 
 @app.route('/book/<competition>/<club>')

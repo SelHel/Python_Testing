@@ -29,4 +29,5 @@ def mock_clubs(mocker):
             "points": "12"
         },
     ]
-    mocker.patch.object(server, 'clubs', clubs)
+    mocked = mocker.patch.object(server, 'clubs', clubs)
+    yield mocked
