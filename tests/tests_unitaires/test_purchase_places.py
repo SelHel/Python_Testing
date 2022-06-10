@@ -27,7 +27,7 @@ def test_purchasePlaces_more_points_than_available(client, mock_clubs, mock_comp
                     'places': 14
                     }
     response = client.post('/purchasePlaces', data=invalid_data)
-
+    assert response.status_code == 200
     assert "You cannot redeem more points than available!" in response.data.decode()
 
 
@@ -44,3 +44,4 @@ def test_purchasePlaces_update_club_points(client, mock_clubs, mock_competitions
     response = client.post('/purchasePlaces', data=data)
     assert response.status_code == 200
     assert int(club['points']) == club_points_after_booking
+    assert "Great-booking complete!" in response.data.decode()
