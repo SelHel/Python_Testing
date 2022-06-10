@@ -12,16 +12,6 @@ Les places doivent être correctement déduites de la compétition.
 """
 
 
-def test_purchasePlaces_with_valid_data(client, mock_clubs, mock_competitions):
-    valid_data = {'club': 'Test Club 1',
-                  'competition': 'Test Competition 1',
-                  'places': 12
-                  }
-    response = client.post('/purchasePlaces', data=valid_data)
-    assert response.status_code == 200
-    assert "Great-booking complete!" in response.data.decode()
-
-
 def test_purchasePlaces_more_than_twelve_places_in_competition(client, mock_clubs, mock_competitions):
     data = {'club': 'Test Club 2',
             'competition': 'Test Competition 1',
@@ -43,13 +33,18 @@ def test_purchasePlaces_more_places_than_available_in_competition(client, mock_c
 
 
 def test_purchasePlaces_update_competition_places(client, mock_clubs, mock_competitions):
-    valid_data = {'club': 'Test Club 1',
-                  'competition': 'Test Competition 1',
-                  'places': 12
-                  }
-    expected_competition_value = 25 - 13
-    response = client.post('/purchasePlaces', data=valid_data)
+    places_required = 12
+    club = mock_clubs[0]
+    competition = mock_competitions[0]
+    competition_places_before_booking = int(competition['numberOfPlaces'])
+    competition_places_after_booking = competition_places_before_booking - places_required
+    data = {'club': club['name'],
+            'competition': competition['name'],
+            'places': places_required
+            }
+    response = client.post('/purchasePlaces', data=data)
     assert response.status_code == 200
+    assert int(competition['numberOfPlaces']) == competition_places_after_booking
     assert "Great-booking complete!" in response.data.decode()
 
 

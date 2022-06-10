@@ -29,7 +29,8 @@ def mock_clubs(mocker):
             "points": "12"
         },
     ]
-    mocker.patch.object(server, 'clubs', clubs)
+    mocked = mocker.patch.object(server, 'clubs', clubs)
+    yield mocked
 
 
 @pytest.fixture
@@ -51,4 +52,5 @@ def mock_competitions(mocker):
             "numberOfPlaces": "5"
         }
     ]
-    mocker.patch.object(server, 'competitions', competitions)
+    mocked = mocker.patch.object(server, 'competitions', competitions)
+    yield mocked
