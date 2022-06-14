@@ -1,9 +1,3 @@
-"""
-Quand un secrétaire se connecte à l'application il devrait pouvoir voir la liste des clubs
-et leurs soldes de points actuels.
-"""
-
-
 def test_should_access_home(client):
     response = client.get('/')
     assert response.status_code == 200
