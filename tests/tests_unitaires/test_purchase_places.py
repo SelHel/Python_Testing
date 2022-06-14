@@ -22,7 +22,7 @@ def test_purchasePlaces_more_points_than_available(client, mock_clubs, mock_comp
 
 
 def test_purchasePlaces_more_than_twelve_places_in_competition(client, mock_clubs, mock_competitions):
-    data = {'club': 'Test Club 2',
+    data = {'club': 'Test Club 1',
             'competition': 'Test Competition 1',
             'places': 13
             }
@@ -32,13 +32,13 @@ def test_purchasePlaces_more_than_twelve_places_in_competition(client, mock_club
 
 
 def test_purchasePlaces_more_places_than_available_in_competition(client, mock_clubs, mock_competitions):
-    data = {'club': 'Test Club 2',
+    data = {'club': 'Test Club 3',
                     'competition': 'Test Competition 3',
                     'places': 6
                     }
     response = client.post('/purchasePlaces', data=data)
     assert response.status_code == 200
-    #assert "You cannot reserve more places than are available in the competition!" in response.data.decode()
+    assert "You cannot reserve more places than are available in the competition!" in response.data.decode()
 
 
 def test_purchasePlaces_update_competition_places(client, mock_clubs, mock_competitions):
