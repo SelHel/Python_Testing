@@ -42,17 +42,21 @@ def showSummary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    try:
+        foundClub = [c for c in clubs if c['name'] == club][0]
+        foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    except IndexError:
+        foundClub = None
+        foundCompetition = None
     date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if foundClub and foundCompetition:
         if foundCompetition['date'] < date_time:
             flash("You cannot book places in past competition")
-            return render_template("welcome.html", club=club, competitions=competitions)
+            return render_template("welcome.html", club=foundClub, competitions=competitions)
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
