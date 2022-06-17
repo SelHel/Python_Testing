@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, flash, url_for
 
-POINTS_FOR_A_PLACE = 1
+POINTS_FOR_A_PLACE = 3
 MAX_PLACES_PER_COMPETITION = 12
 
 
@@ -16,6 +16,12 @@ def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+
+
+def write_to_json(file_name, my_dict, var_name):
+    with open(file_name, 'w') as file:
+        json.dump({var_name: my_dict}, file, indent=4)
+
 
 
 app = Flask(__name__)
@@ -72,8 +78,10 @@ def purchasePlaces():
     elif placesRequired > int(competition['numberOfPlaces']):
         flash(f"You cannot reserve more places than are available in the competition!")
     else:
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
-        club["points"] = places_allowed - placesRequired * POINTS_FOR_A_PLACE
+        competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - placesRequired)
+        club["points"] = str(places_allowed - placesRequired * POINTS_FOR_A_PLACE)
+        write_to_json('clubs.json', clubs,'clubs')
+        write_to_json('competitions.json', competitions, 'competitions')
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
