@@ -6,16 +6,16 @@ POINTS_FOR_A_PLACE = 3
 MAX_PLACES_PER_COMPETITION = 12
 
 
-def loadClubs():
+def load_clubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        list_of_clubs = json.load(c)['clubs']
+        return list_of_clubs
 
 
-def loadCompetitions():
+def load_competitions():
     with open('competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
+        list_of_competitions = json.load(comps)['competitions']
+        return list_of_competitions
 
 
 def write_to_json(file_name, my_dict, var_name):
@@ -23,12 +23,11 @@ def write_to_json(file_name, my_dict, var_name):
         json.dump({var_name: my_dict}, file, indent=4)
 
 
-
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
-competitions = loadCompetitions()
-clubs = loadClubs()
+competitions = load_competitions()
+clubs = load_clubs()
 
 
 @app.route('/')
@@ -36,8 +35,8 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/showSummary',methods=['POST'])
-def showSummary():
+@app.route('/showSummary', methods=['POST'])
+def show_summary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
         return render_template('welcome.html', club=club, competitions=competitions)
@@ -47,40 +46,40 @@ def showSummary():
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
+def book(competition, club):
     try:
-        foundClub = [c for c in clubs if c['name'] == club][0]
-        foundCompetition = [c for c in competitions if c['name'] == competition][0]
+        found_club = [c for c in clubs if c['name'] == club][0]
+        found_competition = [c for c in competitions if c['name'] == competition][0]
     except IndexError:
-        foundClub = None
-        foundCompetition = None
+        found_club = None
+        found_competition = None
     date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if foundClub and foundCompetition:
-        if foundCompetition['date'] < date_time:
+    if found_club and found_competition:
+        if found_competition['date'] < date_time:
             flash("You cannot book places in past competition")
-            return render_template("welcome.html", club=foundClub, competitions=competitions)
-        return render_template('booking.html', club=foundClub, competition=foundCompetition)
+            return render_template("welcome.html", club=found_club, competitions=competitions)
+        return render_template('booking.html', club=found_club, competition=found_competition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=foundClub, competitions=competitions)
+        return render_template('welcome.html', club=found_club, competitions=competitions)
 
 
-@app.route('/purchasePlaces',methods=['POST'])
-def purchasePlaces():
+@app.route('/purchasePlaces', methods=['POST'])
+def purchase_places():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
+    places_required = int(request.form['places'])
     places_allowed = int(club["points"]) // POINTS_FOR_A_PLACE
-    if placesRequired > places_allowed:
+    if places_required > places_allowed:
         flash('You cannot redeem more points than available!')
-    elif placesRequired > MAX_PLACES_PER_COMPETITION:
+    elif places_required > MAX_PLACES_PER_COMPETITION:
         flash(f"You cannot book more than {MAX_PLACES_PER_COMPETITION} places per competition!")
-    elif placesRequired > int(competition['numberOfPlaces']):
+    elif places_required > int(competition['numberOfPlaces']):
         flash(f"You cannot reserve more places than are available in the competition!")
     else:
-        competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - placesRequired)
-        club["points"] = str(places_allowed - placesRequired * POINTS_FOR_A_PLACE)
-        write_to_json('clubs.json', clubs,'clubs')
+        competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - places_required)
+        club["points"] = str(int(club["points"]) - (places_required * POINTS_FOR_A_PLACE))
+        write_to_json('clubs.json', clubs, 'clubs')
         write_to_json('competitions.json', competitions, 'competitions')
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)

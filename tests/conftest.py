@@ -16,17 +16,17 @@ def mock_clubs(mocker):
         {
             "name": "Test Club 1",
             "email": "club1@test.com",
-            "points": "13"
+            "points": "40"
         },
         {
             "name": "Test Club 2",
             "email": "club2@test.com",
-            "points": "4"
+            "points": "25"
         },
         {
             "name": "Test Club 3",
             "email": "club3@test.com",
-            "points": "12"
+            "points": "2"
         },
     ]
     mocked = mocker.patch.object(server, 'clubs', clubs)
@@ -38,7 +38,7 @@ def mock_competitions(mocker):
     competitions = [
         {
             "name": "Test Competition 1",
-            "date": "2021-06-07 10:00:00",
+            "date": "2023-06-07 10:00:00",
             "numberOfPlaces": "25"
         },
         {
@@ -50,6 +50,11 @@ def mock_competitions(mocker):
             "name": "Test Competition 3",
             "date": "2022-06-09 10:00:00",
             "numberOfPlaces": "5"
+        },
+        {
+            "name": "Test Competition 4Ò",
+            "date": "2020-06-09 10:00:00",
+            "numberOfPlaces": "25"
         }
     ]
     mocked = mocker.patch.object(server, 'competitions', competitions)
