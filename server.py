@@ -79,8 +79,8 @@ def purchase_places():
     else:
         competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - places_required)
         club["points"] = str(int(club["points"]) - (places_required * POINTS_FOR_A_PLACE))
-        write_to_json('clubs.json', clubs, 'clubs')
-        write_to_json('competitions.json', competitions, 'competitions')
+        #write_to_json('clubs.json', clubs, 'clubs')
+        #write_to_json('competitions.json', competitions, 'competitions')
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
