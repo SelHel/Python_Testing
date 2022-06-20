@@ -52,7 +52,7 @@ def mock_competitions(mocker):
             "numberOfPlaces": "5"
         },
         {
-            "name": "Test Competition 4Ò",
+            "name": "Test Competition 4",
             "date": "2020-06-09 10:00:00",
             "numberOfPlaces": "25"
         }

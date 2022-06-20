@@ -61,8 +61,8 @@ def test_purchase_places_update_club_points(client, mock_clubs, mock_competition
     places_required = 10
     club = mock_clubs[0]
     competition = mock_competitions[0]
-    club_points_before_booking = int(club["points"])  # Mock with 13 points
-    club_points_after_booking = club_points_before_booking - (places_required * POINTS_FOR_A_PLACE)  # expected result 3
+    club_points_before_booking = int(club["points"])
+    club_points_after_booking = club_points_before_booking - (places_required * POINTS_FOR_A_PLACE)
     data = {'club': club['name'],
             'competition': competition['name'],
             'places': places_required
