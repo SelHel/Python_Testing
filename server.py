@@ -4,16 +4,18 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 
 POINTS_FOR_A_PLACE = 3
 MAX_PLACES_PER_COMPETITION = 12
+COMPETITIONS_FILE = 'competitions.json'
+CLUBS_FILE = 'clubs.json'
 
 
 def load_clubs():
-    with open('clubs.json') as c:
+    with open(CLUBS_FILE) as c:
         list_of_clubs = json.load(c)['clubs']
         return list_of_clubs
 
 
 def load_competitions():
-    with open('competitions.json') as comps:
+    with open(COMPETITIONS_FILE) as comps:
         list_of_competitions = json.load(comps)['competitions']
         return list_of_competitions
 
@@ -79,8 +81,8 @@ def purchase_places():
     else:
         competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - places_required)
         club["points"] = str(int(club["points"]) - (places_required * POINTS_FOR_A_PLACE))
-        #write_to_json('clubs.json', clubs, 'clubs')
-        #write_to_json('competitions.json', competitions, 'competitions')
+        write_to_json(CLUBS_FILE, clubs, 'clubs')
+        write_to_json(COMPETITIONS_FILE, competitions, 'competitions')
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 

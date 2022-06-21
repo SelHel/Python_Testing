@@ -1,6 +1,9 @@
+from unittest import mock
 from server import POINTS_FOR_A_PLACE, MAX_PLACES_PER_COMPETITION
 
 
+@mock.patch('server.COMPETITIONS_FILE', 'tests/competitions.json')
+@mock.patch('server.CLUBS_FILE', 'tests/clubs.json')
 def test_purchase_places_with_valid_data(client, mock_clubs, mock_competitions):
     valid_data = {'club': 'Test Club 1',
                   'competition': 'Test Competition 1',
@@ -40,7 +43,8 @@ def test_purchase_places_more_places_than_available_in_competition(client, mock_
     assert response.status_code == 200
     assert "You cannot reserve more places than are available in the competition!" in response.data.decode()
 
-
+@mock.patch('server.COMPETITIONS_FILE', 'tests/competitions.json')
+@mock.patch('server.CLUBS_FILE', 'tests/clubs.json')
 def test_purchase_places_update_competition_places(client, mock_clubs, mock_competitions):
     places_required = 12
     club = mock_clubs[0]
@@ -57,6 +61,8 @@ def test_purchase_places_update_competition_places(client, mock_clubs, mock_comp
     assert "Great-booking complete!" in response.data.decode()
 
 
+@mock.patch('server.COMPETITIONS_FILE', 'tests/competitions.json')
+@mock.patch('server.CLUBS_FILE', 'tests/clubs.json')
 def test_purchase_places_update_club_points(client, mock_clubs, mock_competitions):
     places_required = 10
     club = mock_clubs[0]

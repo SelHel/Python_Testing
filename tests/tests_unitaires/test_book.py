@@ -11,3 +11,11 @@ def test_valid_competition_date(client, mock_clubs, mock_competitions):
     competition = mock_competitions[0]['name']
     response = client.get(f"/book/{competition}/{club}")
     assert response.status_code == 200
+
+
+def test_no_existing_competition(client, mock_clubs, mock_competitions):
+    club = 'no existing'
+    competition = 'no existing'
+    response = client.get(f"/book/{competition}/{club}")
+    assert response.status_code == 200
+    assert "Something went wrong-please try again" in response.data.decode()

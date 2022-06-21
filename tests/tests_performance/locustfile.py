@@ -13,7 +13,6 @@ class ProjectPerfTest(HttpUser):
             if response.elapsed.total_seconds() > 5:
                 response.failure('The request took too long')
 
-
     @task
     def show_summary(self):
         data = {'email': 'john@simplylift.co'}
@@ -37,7 +36,6 @@ class ProjectPerfTest(HttpUser):
         with self.client.get('/displayPointsBoard', catch_response=True) as response:
             if response.elapsed.total_seconds() > 5:
                 response.failure('The request took too long')
-
 
     @task
     def logout(self):
