@@ -24,9 +24,6 @@ def test_purchasePlaces_update_club_points(client, mock_clubs, mock_competitions
     assert "Points available: 3" in response.data.decode()
 
 
-def test_
-
-
 
 
 
