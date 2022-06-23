@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | GUDLFT Registration</title>
+</head>
+<body>
+    <h1>Welcome to the GUDLFT clubs points board !</h1>
+
+	<h3>List of clubs and their available points :</h3>
+	<ul style="border: 1px solid; width: 30%; list-style: none; padding: 0;">
+		{% for club in clubs %}
+		<li style="border: 1px solid; padding: 5px;">
+			Club name : {{club['name']}}<br>
+			Number of points available : {{club['points']}}
+		</li>
+		{% endfor %}
+	</ul>
+	<a href="/">Click here to back to homepage</a>
+</body>
+</html>
