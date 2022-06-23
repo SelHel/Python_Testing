@@ -1,6 +1,7 @@
 from unittest import mock
 from server import POINTS_FOR_A_PLACE
 
+
 @mock.patch('server.COMPETITIONS_FILE', 'tests/competitions.json')
 @mock.patch('server.CLUBS_FILE', 'tests/clubs.json')
 def test_login_logout(client, mock_clubs, mock_competitions):
