@@ -6,7 +6,6 @@ il reçoit un message de confirmation.
 
 Attendu :
 Il ne devrait pas pouvoir réserver plus de 12 places par compétition.
-Les points échangés doivent être correctement déduits du total du club.
 L'UI doit l'empêcher de réserver plus de 12 places.
 Les places doivent être correctement déduites de la compétition.
 """
